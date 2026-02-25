@@ -1,0 +1,52 @@
+{
+    "services": [
+        {
+            "name": "Portainer",
+            "url": "https://portainer.local.lan",
+            "icon": "portainer",
+            "description": "Container Management"
+        },
+        {
+            "name": "Nextcloud",
+            "url": "https://cloud.local.lan",
+            "icon": "nextcloud",
+            "description": "Cloud Storage"
+        },
+        {
+            "name": "Plex",
+            "url": "https://plex.local.lan",
+            "icon": "plex",
+            "description": "Media Server"
+        },
+        {
+            "name": "Home Assistant",
+            "url": "https://ha.local.lan",
+            "icon": "homeassistant",
+            "description": "Smart Home"
+        },
+        {
+            "name": "Grafana",
+            "url": "https://grafana.local.lan",
+            "icon": "grafana",
+            "description": "Monitoring"
+        },
+        {
+            "name": "Proxmox",
+            "url": "https://proxmox.local.lan",
+            "icon": "proxmox",
+            "description": "Virtualization"
+        },
+        {
+            "name": "Pi-hole",
+            "url": "https://pihole.local.lan",
+            "icon": "pihole",
+            "description": "DNS & Ad Blocking"
+        },
+        {
+            "name": "GitLab",
+            "url": "https://gitlab.local.lan",
+            "icon": "gitlab",
+            "description": "Code Repository"
+        }
+    ]
+}
