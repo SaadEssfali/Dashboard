@@ -89,7 +89,7 @@ import fs from "fs";
 import path from "path";
 
 export function getNPMConfig() {
-    const configPath = path.join(process.cwd(), "src/config/npm.json");
+    const configPath = path.join(process.cwd(), "data", "npm.json");
     let url = process.env.NPM_API_URL || "";
     let email = process.env.NPM_API_EMAIL || "";
     let password = process.env.NPM_API_PASSWORD || "";
@@ -190,7 +190,7 @@ export async function fetchNPMHosts(): Promise<ServiceItem[]> {
 
     // Load custom icons
     let customIcons: Record<string, string> = {};
-    const iconsPath = path.join(process.cwd(), "src/config/icons.json");
+    const iconsPath = path.join(process.cwd(), "data", "icons.json");
     if (fs.existsSync(iconsPath)) {
         try {
             customIcons = JSON.parse(fs.readFileSync(iconsPath, "utf-8") || "{}");

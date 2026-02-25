@@ -2,8 +2,13 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
-// Define path to the config file
-const configPath = path.join(process.cwd(), "src/config/npm.json");
+const dataDir = path.join(process.cwd(), "data");
+const configPath = path.join(dataDir, "npm.json");
+
+// Ensure the data directory exists
+if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+}
 
 export async function GET() {
     try {
