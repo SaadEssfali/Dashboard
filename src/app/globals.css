@@ -4,75 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  * {
-    @apply transition-colors duration-200;
-  }
-
-  body {
-    @apply font-sans;
-  }
-}
-
-@layer utilities {
-  .glass {
-    @apply bg-white/[0.08] backdrop-blur-xl border border-white/[0.12];
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  }
-
-  .glass-strong {
-    @apply bg-white/[0.12] backdrop-blur-2xl border border-white/[0.18];
-    box-shadow:
-      0 12px 40px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.02);
-  }
-
-  .glass-card {
-    @apply bg-white/[0.06] backdrop-blur-xl border border-white/[0.08];
-    box-shadow:
-      0 4px 24px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  }
-
-  .glass-card:hover {
-    @apply bg-white/[0.1] border-white/[0.15];
-    box-shadow:
-      0 12px 40px rgba(0, 0, 0, 0.18),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  }
-
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400;
-  }
-
-  .text-gradient-light {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500;
-  }
-
-  .gradient-border {
-    position: relative;
-  }
-
-  .gradient-border::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg,
-        rgba(255, 255, 255, 0.15),
-        rgba(255, 255, 255, 0.02),
-        rgba(255, 255, 255, 0.08));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-  }
-}
-
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -83,15 +14,15 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: hsl(var(--nextui-default-300));
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: hsl(var(--nextui-default-400));
 }
 
-/* Background image overlay */
+/* Background wallpaper */
 .bg-wallpaper {
   position: fixed;
   inset: 0;
@@ -105,6 +36,12 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(2px);
+}
+
+.dark .bg-wallpaper::after {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.light .bg-wallpaper::after {
+  background: rgba(255, 255, 255, 0.65);
 }

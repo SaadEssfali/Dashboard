@@ -13,8 +13,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className="font-sans antialiased bg-[#0a0a0f] text-white overflow-x-hidden">
+    <html lang="en" suppressHydrationWarning>
+      <body className="font-sans antialiased">
         <Providers>
           {children}
         </Providers>

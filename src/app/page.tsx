@@ -1,12 +1,13 @@
 import { AppCard } from "@/components/AppCard";
 import { SpotlightSearch } from "@/components/SpotlightSearch";
 import { TopBar } from "@/components/TopBar";
+import { Divider } from "@nextui-org/react";
 import config from "@/config/services.json";
 
 export default function Home() {
   return (
     <>
-      {/* Full-screen Background Wallpaper (Unsplash free) */}
+      {/* Background Wallpaper */}
       <div
         className="bg-wallpaper"
         style={{
@@ -14,51 +15,49 @@ export default function Home() {
         }}
       />
 
-      <main className="relative z-10 min-h-screen flex flex-col">
-        {/* ═══════ Top Bar (macOS-style) ═══════ */}
+      <div className="relative z-10 min-h-screen flex flex-col">
+        {/* Navigation */}
         <TopBar />
 
-        {/* ═══════ Main Content ═══════ */}
-        <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
-          {/* Hero Section */}
-          <div className="text-center mb-14 space-y-4">
-            <h2 className="text-5xl sm:text-6xl font-extrabold tracking-tight">
-              <span className="text-gradient">Your Lab.</span>
-              <br />
-              <span className="text-white/90">One Place.</span>
+        {/* Main Content */}
+        <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-12">
+          {/* Hero */}
+          <div className="text-center mb-12">
+            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight dark:text-white text-gray-800">
+              Your Lab. One Place.
             </h2>
-            <p className="text-white/30 text-[15px] font-medium max-w-md mx-auto leading-relaxed">
-              Access all your self-hosted applications from a single, beautiful dashboard.
+            <p className="dark:text-white/70 text-gray-600 mt-3 text-base max-w-lg mx-auto">
+              Access all your self-hosted services from a single, beautiful dashboard.
             </p>
           </div>
 
-          {/* App Grid */}
-          <div className="w-full max-w-5xl">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {config.services.map((service, index) => (
-                <AppCard
-                  key={service.name}
-                  name={service.name}
-                  url={service.url}
-                  icon={service.icon}
-                  description={service.description}
-                  index={index}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+          <Divider className="mb-10 max-w-xs mx-auto" />
 
-        {/* ═══════ Footer ═══════ */}
+          {/* App Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+            {config.services.map((service, index) => (
+              <AppCard
+                key={service.name}
+                name={service.name}
+                url={service.url}
+                icon={service.icon}
+                description={service.description}
+                index={index}
+              />
+            ))}
+          </div>
+        </main>
+
+        {/* Footer */}
         <footer className="py-6 text-center">
-          <p className="text-[11px] text-white/15 font-medium">
-            Home Lab OS • Built with Next.js & Tailwind
+          <p className="text-tiny text-default-300">
+            Home Lab OS • Built with Next.js & NextUI
           </p>
         </footer>
 
-        {/* Spotlight Search */}
+        {/* Spotlight */}
         <SpotlightSearch />
-      </main>
+      </div>
     </>
   );
 }
