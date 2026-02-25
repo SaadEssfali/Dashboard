@@ -11,14 +11,36 @@ import {
     Kbd,
     Listbox,
     ListboxItem,
-    Divider,
 } from "@nextui-org/react";
 import { Search, ArrowUpRight } from "lucide-react";
-import config from "../config/services.json";
+
+interface ServiceItem {
+    name: string;
+    url: string;
+    icon: string;
+    description?: string;
+}
 
 export const SpotlightSearch = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [query, setQuery] = useState("");
+    const [services, setServices] = useState<ServiceItem[]>([]);
+
+    // Fetch services dynamically
+    useEffect(() => {
+        const fetchServices = async () => {
+            try {
+                const res = await fetch("/api/services");
+                const data = await res.json();
+                setServices(data.services || []);
+            } catch (err) {
+                console.error("Failed to fetch services for search:", err);
+            }
+        };
+        fetchServices();
+        const interval = setInterval(fetchServices, 60000);
+        return () => clearInterval(interval);
+    }, []);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -35,7 +57,7 @@ export const SpotlightSearch = () => {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, []);
 
-    const filteredServices = config.services.filter(
+    const filteredServices = services.filter(
         (s) =>
             s.name.toLowerCase().includes(query.toLowerCase()) ||
             (s.description && s.description.toLowerCase().includes(query.toLowerCase()))
@@ -84,7 +106,7 @@ export const SpotlightSearch = () => {
                         >
                             {filteredServices.map((service) => (
                                 <ListboxItem
-                                    key={service.name}
+                                    key={`${service.name}-${service.url}`}
                                     href={service.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -100,7 +122,7 @@ export const SpotlightSearch = () => {
                                     endContent={
                                         <ArrowUpRight size={14} className="text-default-300" />
                                     }
-                                    description={service.description || new URL(service.url).hostname}
+                                    description={service.description || ""}
                                     classNames={{
                                         base: "py-3 gap-3 rounded-xl data-[hover=true]:bg-default-100",
                                         title: "font-medium text-sm",

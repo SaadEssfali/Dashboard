@@ -1,8 +1,7 @@
-import { AppCard } from "@/components/AppCard";
 import { SpotlightSearch } from "@/components/SpotlightSearch";
 import { TopBar } from "@/components/TopBar";
+import { ServiceGrid } from "@/components/ServiceGrid";
 import { Divider } from "@nextui-org/react";
-import config from "@/config/services.json";
 
 export default function Home() {
   return (
@@ -33,19 +32,8 @@ export default function Home() {
 
           <Divider className="mb-10 max-w-xs mx-auto" />
 
-          {/* App Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
-            {config.services.map((service, index) => (
-              <AppCard
-                key={service.name}
-                name={service.name}
-                url={service.url}
-                icon={service.icon}
-                description={service.description}
-                index={index}
-              />
-            ))}
-          </div>
+          {/* Dynamic App Grid */}
+          <ServiceGrid />
         </main>
 
         {/* Footer */}
