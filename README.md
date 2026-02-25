@@ -31,7 +31,7 @@ Built with Next.js 15 • NextUI • Tailwind CSS
 version: "3.8"
 services:
   homelab-os:
-    image: homelab-os:latest
+    image: saadessfali/homelab-os:latest
     container_name: homelab-os
     restart: unless-stopped
     ports:
@@ -47,7 +47,7 @@ Open **http://localhost:3000** 🎉
 ### Docker Run
 
 ```bash
-docker run -d -p 3000:3000 --name homelab-os homelab-os:latest
+docker run -d -p 3000:3000 --name homelab-os saadessfali/homelab-os:latest
 ```
 
 ### From Source
