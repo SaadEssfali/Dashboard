@@ -50,7 +50,28 @@ export async function POST(request: Request) {
             );
         }
 
-        // Save to npm.json
+        // 1. Test connection from backend
+        try {
+            const testRes = await fetch(`${url}/api/tokens`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ identity: email, secret: password }),
+            });
+
+            if (!testRes.ok) {
+                return NextResponse.json(
+                    { error: `NPM Connection failed: ${testRes.status} ${testRes.statusText}` },
+                    { status: 400 }
+                );
+            }
+        } catch (fetchErr: any) {
+            return NextResponse.json(
+                { error: `NPM Network error: ${fetchErr.message}` },
+                { status: 400 }
+            );
+        }
+
+        // 2. Save to npm.json
         if (!fs.existsSync(dataDir)) {
             fs.mkdirSync(dataDir, { recursive: true });
         }

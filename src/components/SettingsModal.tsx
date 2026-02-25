@@ -55,21 +55,7 @@ export const SettingsModal = ({ onSaveSuccess, showLargeButton = false }: { onSa
         setErrorMsg("");
 
         try {
-            // 1. Try to test connection to NPM first
-            const testRes = await fetch(`${url}/api/tokens`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ identity: email, secret: password }),
-            });
-
-            if (!testRes.ok) {
-                setStatus("error");
-                setErrorMsg(`Connection failed: ${testRes.status} ${testRes.statusText}`);
-                setIsLoading(false);
-                return;
-            }
-
-            // 2. If Auth succeeds, save the config to backend
+            // Send config to backend (which tests the connection and saves it)
             const saveRes = await fetch("/api/settings", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -77,7 +63,8 @@ export const SettingsModal = ({ onSaveSuccess, showLargeButton = false }: { onSa
             });
 
             if (!saveRes.ok) {
-                throw new Error("Failed to save configuration");
+                const errorData = await saveRes.json();
+                throw new Error(errorData.error || "Failed to save configuration");
             }
 
             setStatus("success");
