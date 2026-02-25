@@ -51,6 +51,10 @@ export async function POST(request: Request) {
         }
 
         // Save to npm.json
+        if (!fs.existsSync(dataDir)) {
+            fs.mkdirSync(dataDir, { recursive: true });
+        }
+
         fs.writeFileSync(
             configPath,
             JSON.stringify({ url, email, password }, null, 2),

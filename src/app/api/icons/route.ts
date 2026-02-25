@@ -42,6 +42,10 @@ export async function POST(request: Request) {
             delete icons[hostname]; // allow clearing
         }
 
+        if (!fs.existsSync(dataDir)) {
+            fs.mkdirSync(dataDir, { recursive: true });
+        }
+
         fs.writeFileSync(configPath, JSON.stringify(icons, null, 2), "utf-8");
 
         return NextResponse.json({ success: true, icons });
