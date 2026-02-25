@@ -18,6 +18,7 @@ interface ServiceItem {
     name: string;
     url: string;
     icon: string;
+    customIcon?: string;
     description?: string;
 }
 
@@ -30,7 +31,7 @@ export const SpotlightSearch = () => {
     useEffect(() => {
         const fetchServices = async () => {
             try {
-                const res = await fetch("/api/services");
+                const res = await fetch("/api/services", { cache: "no-store" });
                 const data = await res.json();
                 setServices(data.services || []);
             } catch (err) {
@@ -111,10 +112,15 @@ export const SpotlightSearch = () => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     startContent={
-                                        <div className="p-2 rounded-xl bg-default-100">
+                                        <div className="p-2 rounded-xl bg-default-100 flex items-center justify-center">
                                             <img
-                                                src={`https://cdn.simpleicons.org/${service.icon}`}
-                                                className="w-5 h-5"
+                                                src={
+                                                    service.customIcon ||
+                                                    (service.icon !== "globe"
+                                                        ? `https://cdn.simpleicons.org/${service.icon}`
+                                                        : `https://icon.horse/icon/${new URL(service.url).hostname}`)
+                                                }
+                                                className={service.customIcon || service.icon === "globe" ? "w-5 h-5 object-contain rounded-sm" : "w-5 h-5"}
                                                 alt={service.name}
                                             />
                                         </div>

@@ -29,7 +29,10 @@ export async function GET() {
             }));
         }
 
-        return NextResponse.json({ services });
+        return NextResponse.json({
+            services,
+            configured: isNPMConfigured()
+        });
     } catch (error) {
         return NextResponse.json(
             { error: "Failed to fetch services", services: [] },

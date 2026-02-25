@@ -13,6 +13,7 @@ import { Monitor, Search } from "lucide-react";
 import { SystemMonitor } from "./SystemMonitor";
 import { NPMIntegration } from "./NPMIntegration";
 import { ThemeSwitcher } from "./ThemeSwitcher";
+import { SettingsModal } from "./SettingsModal";
 
 export const TopBar = () => {
     const triggerSearch = () => {
@@ -66,6 +67,9 @@ export const TopBar = () => {
                 </NavbarItem>
                 <NavbarItem className="hidden md:flex">
                     <SystemMonitor />
+                </NavbarItem>
+                <NavbarItem>
+                    <SettingsModal />
                 </NavbarItem>
                 <NavbarItem>
                     <ThemeSwitcher />

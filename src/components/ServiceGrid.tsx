@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { AppCard } from "./AppCard";
+import { SettingsModal } from "./SettingsModal";
 import { Spinner } from "@nextui-org/react";
 
 interface ServiceItem {
     name: string;
     url: string;
     icon: string;
+    customIcon?: string;
     description?: string;
     source?: string;
 }
@@ -15,20 +17,22 @@ interface ServiceItem {
 export const ServiceGrid = () => {
     const [services, setServices] = useState<ServiceItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isConfigured, setIsConfigured] = useState(false);
+
+    const fetchServices = async () => {
+        try {
+            const res = await fetch("/api/services", { cache: "no-store" });
+            const data = await res.json();
+            setServices(data.services || []);
+            setIsConfigured(!!data.configured);
+        } catch (err) {
+            console.error("Failed to fetch services:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchServices = async () => {
-            try {
-                const res = await fetch("/api/services");
-                const data = await res.json();
-                setServices(data.services || []);
-            } catch (err) {
-                console.error("Failed to fetch services:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchServices();
         // Poll every 60s for new/removed services
         const interval = setInterval(fetchServices, 60000);
@@ -45,11 +49,20 @@ export const ServiceGrid = () => {
 
     if (services.length === 0) {
         return (
-            <div className="text-center py-20">
-                <p className="text-default-400 text-lg">No services found</p>
-                <p className="text-default-300 text-sm mt-2">
-                    Connect to Nginx Proxy Manager or edit services.json
-                </p>
+            <div className="text-center py-20 bg-background/40 backdrop-blur-md rounded-2xl border border-divider/50 shadow-sm max-w-lg mx-auto">
+                <p className="text-foreground font-semibold text-lg">No services found</p>
+                {!isConfigured ? (
+                    <>
+                        <p className="text-default-400 text-sm mt-2 max-w-xs mx-auto">
+                            Connect to Nginx Proxy Manager to auto-discover your apps.
+                        </p>
+                        <SettingsModal showLargeButton={true} onSaveSuccess={fetchServices} />
+                    </>
+                ) : (
+                    <p className="text-default-400 text-sm mt-2">
+                        You are connected to NPM, but no active proxy hosts were found.
+                    </p>
+                )}
             </div>
         );
     }
@@ -62,8 +75,10 @@ export const ServiceGrid = () => {
                     name={service.name}
                     url={service.url}
                     icon={service.icon}
+                    customIcon={service.customIcon}
                     description={service.description}
                     index={index}
+                    onIconUpdated={fetchServices}
                 />
             ))}
         </div>

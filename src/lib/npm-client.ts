@@ -85,15 +85,39 @@ export function detectServiceInfo(domain: string): {
     };
 }
 
-// ─── NPM API Client ───
+import fs from "fs";
+import path from "path";
+
+export function getNPMConfig() {
+    const configPath = path.join(process.cwd(), "src/config/npm.json");
+    let url = process.env.NPM_API_URL || "";
+    let email = process.env.NPM_API_EMAIL || "";
+    let password = process.env.NPM_API_PASSWORD || "";
+
+    if (fs.existsSync(configPath)) {
+        try {
+            const data = fs.readFileSync(configPath, "utf-8");
+            if (data.trim() !== "") {
+                const config = JSON.parse(data);
+                if (config.url && config.email && config.password) {
+                    url = config.url;
+                    email = config.email;
+                    password = config.password;
+                }
+            }
+        } catch (e) {
+            console.error("Error parsing npm.json", e);
+        }
+    }
+
+    return { url, email, password };
+}
 
 let cachedToken: string | null = null;
 let tokenExpiry: number = 0;
 
 async function getToken(): Promise<string> {
-    const url = process.env.NPM_API_URL;
-    const email = process.env.NPM_API_EMAIL;
-    const password = process.env.NPM_API_PASSWORD;
+    const { url, email, password } = getNPMConfig();
 
     if (!url || !email || !password) {
         throw new Error("NPM_API_URL, NPM_API_EMAIL, NPM_API_PASSWORD are required");
@@ -126,8 +150,8 @@ export interface NPMProxyHost {
     forward_host: string;
     forward_port: number;
     forward_scheme: string;
-    enabled: number;
-    ssl_forced: number;
+    enabled: number | boolean;
+    ssl_forced: number | boolean;
     meta: {
         letsencrypt_agree?: boolean;
         dns_challenge?: boolean;
@@ -142,6 +166,7 @@ export interface ServiceItem {
     name: string;
     url: string;
     icon: string;
+    customIcon?: string;
     description: string;
     source: "npm" | "static";
 }
@@ -151,7 +176,7 @@ export interface ServiceItem {
  */
 export async function fetchNPMHosts(): Promise<ServiceItem[]> {
     const token = await getToken();
-    const url = process.env.NPM_API_URL;
+    const { url } = getNPMConfig();
 
     const res = await fetch(`${url}/api/nginx/proxy-hosts?expand=certificate`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -163,17 +188,32 @@ export async function fetchNPMHosts(): Promise<ServiceItem[]> {
 
     const hosts: NPMProxyHost[] = await res.json();
 
+    // Load custom icons
+    let customIcons: Record<string, string> = {};
+    const iconsPath = path.join(process.cwd(), "src/config/icons.json");
+    if (fs.existsSync(iconsPath)) {
+        try {
+            customIcons = JSON.parse(fs.readFileSync(iconsPath, "utf-8") || "{}");
+        } catch (e) {
+            console.error("Failed to parse custom icons config", e);
+        }
+    }
+
     return hosts
-        .filter((h) => h.enabled === 1)
+        .filter((h) => h.enabled === 1 || h.enabled === true)
         .map((host) => {
             const domain = host.domain_names[0] || "unknown";
             const scheme = host.ssl_forced ? "https" : host.forward_scheme || "http";
             const detected = detectServiceInfo(domain);
 
+            // Check for custom override
+            const customIconUrl = customIcons[domain];
+
             return {
                 name: detected.name,
                 url: `${scheme}://${domain}`,
                 icon: detected.icon,
+                customIcon: customIconUrl, // Add this new property
                 description: detected.description,
                 source: "npm" as const,
             };
@@ -188,7 +228,7 @@ export async function fetchNPMStats(): Promise<{
     expiringCerts: number;
 }> {
     const token = await getToken();
-    const url = process.env.NPM_API_URL;
+    const { url } = getNPMConfig();
 
     const res = await fetch(`${url}/api/nginx/proxy-hosts?expand=certificate`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -216,9 +256,6 @@ export async function fetchNPMStats(): Promise<{
  * Check if NPM is configured
  */
 export function isNPMConfigured(): boolean {
-    return !!(
-        process.env.NPM_API_URL &&
-        process.env.NPM_API_EMAIL &&
-        process.env.NPM_API_PASSWORD
-    );
+    const { url, email, password } = getNPMConfig();
+    return !!(url && email && password);
 }
