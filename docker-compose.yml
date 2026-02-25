@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  homelab-os:
+    image: homelab-os:latest
+    container_name: homelab-os
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    # Optional: mount your own services config
+    # volumes:
+    #   - ./services.json:/app/src/config/services.json:ro

@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
 
-## Getting Started
+# 🖥️ Home Lab OS
 
-First, run the development server:
+**A beautiful, lightweight dashboard for your self-hosted infrastructure.**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Built with Next.js 15 • NextUI • Tailwind CSS
+
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Docker Hub](https://img.shields.io/docker/pulls/homelab-os.svg)](https://hub.docker.com/r/homelab-os)
+
+</div>
+
+---
+
+## ✨ Features
+
+- 🎨 **Beautiful UI** — Glassmorphism cards with NextUI components and Unsplash backgrounds
+- 🔍 **Spotlight Search** — Press `⌘K` / `Ctrl+K` to instantly filter and launch any app
+- 📊 **System Monitor** — Real-time CPU, RAM, and uptime stats in the navbar
+- 🌐 **Nginx Proxy Manager** — Active proxy hosts count and SSL certificate status
+- 🌙 **Dark / Light Mode** — Automatic theme switching with `next-themes`
+- ⚡ **Live Status** — Ping-based health checks with animated indicators
+- 🐳 **Docker Ready** — Multi-stage optimized image (~150MB)
+
+## 🚀 Quick Start
+
+### Docker Compose (Recommended)
+
+```yaml
+version: "3.8"
+services:
+  homelab-os:
+    image: homelab-os:latest
+    container_name: homelab-os
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+docker compose up -d
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open **http://localhost:3000** 🎉
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Docker Run
 
-## Learn More
+```bash
+docker run -d -p 3000:3000 --name homelab-os homelab-os:latest
+```
 
-To learn more about Next.js, take a look at the following resources:
+### From Source
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+git clone https://github.com/SaadEssfali/Dashboard.git
+cd Dashboard
+npm install
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## ⚙️ Configuration
 
-## Deploy on Vercel
+Edit `src/config/services.json` to add your services:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```json
+{
+  "services": [
+    {
+      "name": "Portainer",
+      "url": "https://portainer.your-domain.com",
+      "icon": "portainer",
+      "description": "Container Management"
+    }
+  ]
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The `icon` field uses [Simple Icons](https://simpleicons.org/) slugs.
+
+### Custom Services via Docker Volume
+
+```yaml
+volumes:
+  - ./my-services.json:/app/src/config/services.json:ro
+```
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| [Next.js 15](https://nextjs.org/) | React framework (App Router) |
+| [NextUI](https://nextui.org/) | UI component library |
+| [Tailwind CSS](https://tailwindcss.com/) | Utility-first CSS |
+| [Framer Motion](https://www.framer.com/motion/) | Animations |
+| [Lucide React](https://lucide.dev/) | Icons |
+| [Simple Icons](https://simpleicons.org/) | Brand logos |
+| [systeminformation](https://systeminformation.io/) | System stats API |
+
+## 📄 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+**Free to use, modify, and distribute.** Contributions welcome! ❤️
+
+---
+
+<div align="center">
+  Made with ❤️ by <a href="https://github.com/SaadEssfali">Saad Essfali</a>
+</div>
