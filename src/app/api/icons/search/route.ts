@@ -19,7 +19,7 @@ export async function GET(request: Request) {
                 headers: {
                     "User-Agent": "HomeLab-OS-Dashboard",
                 },
-                next: { revalidate: 3600 } // Next.js cache
+                next: { revalidate: 3600 }
             });
 
             if (res.ok) {
@@ -37,10 +37,13 @@ export async function GET(request: Request) {
                 });
                 lastFetchTime = Date.now();
             } else {
-                console.error("Failed to fetch selfhst icons from GitHub API:", res.statusText);
+                const errText = await res.text();
+                console.error("Failed to fetch selfhst icons from GitHub:", res.status, errText);
+                return NextResponse.json({ error: `GitHub API Error: ${res.status} ${res.statusText}` }, { status: res.status });
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error fetching selfhst icons:", error);
+            return NextResponse.json({ error: `Network error: ${error.message}` }, { status: 500 });
         }
     }
 

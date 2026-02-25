@@ -3,7 +3,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "Home Lab OS",
+  title: "Dash21",
   description: "Your personal infrastructure control center",
 };
 

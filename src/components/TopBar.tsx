@@ -34,11 +34,9 @@ export const TopBar = () => {
         >
             {/* Brand */}
             <NavbarBrand className="gap-3">
-                <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-secondary shadow-md">
-                    <Monitor size={18} className="text-white" />
-                </div>
+                <img src="/logo.png" alt="Dash21 Logo" className="w-10 h-10 rounded-2xl shadow-md object-contain" />
                 <div className="hidden sm:flex flex-col">
-                    <p className="font-bold text-sm text-foreground">Home Lab OS</p>
+                    <p className="font-bold text-sm text-foreground">Dash21</p>
                     <p className="text-tiny text-default-400">Control Center</p>
                 </div>
             </NavbarBrand>

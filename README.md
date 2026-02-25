@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🖥️ Home Lab OS
+# 🖥️ Dash21
 
 **A beautiful, lightweight dashboard for your self-hosted infrastructure.**
 

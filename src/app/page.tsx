@@ -39,7 +39,7 @@ export default function Home() {
         {/* Footer */}
         <footer className="py-6 text-center">
           <p className="text-tiny text-default-300">
-            Home Lab OS • Built with Next.js & NextUI
+            Dash21 • Built with Next.js & NextUI
           </p>
         </footer>
 
